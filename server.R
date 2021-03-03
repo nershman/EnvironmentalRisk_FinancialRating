@@ -27,4 +27,8 @@ server <- function(input, output, session) {
     )
   })
   
+  output$tbl <- DT::renderDataTable({
+    DT::datatable(data())
+  })
+  
 }

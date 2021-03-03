@@ -1,4 +1,5 @@
 library(DT)
+library(tidyverse)
 
 ui <- fluidPage(
   titlePanel("Statistical Consulting"),
@@ -32,7 +33,7 @@ ui <- fluidPage(
     ),
     
   mainPanel(
-
+    DT::dataTableOutput("tbl")
   )
   )
 )
