@@ -1,17 +1,16 @@
+library(DT)
+
 ui <- fluidPage(
   titlePanel("Statistical Consulting"),
   
   sidebarLayout(
     sidebarPanel(
-      fileInput("file1", "Choose CSV File",
+      fileInput("file1", "Choose Excel File",
                 multiple = FALSE,
-                accept = c("text/csv",
-                           "text/comma-separated-values,text/plain",
-                           ".csv")),
-    selectInput("response", "Response Variable",
-                choices = c("Financial Rating",
-                            "Qualitative Rating "), 
-                selected = "Financial Rating", selectize = TRUE),
+                accept = "xlsx"),
+    selectInput("response", "Response Variable:",
+                choices = c("Financial Rating", "Qualitative Rating"),
+                selected = "Financial Rating"),
     checkboxGroupInput("covariate", "Choose Covariates:",
                 c("Qualitative rating about transparency", 
                   "Qualitative rating about shareholder's contribution",
@@ -33,7 +32,7 @@ ui <- fluidPage(
     ),
     
   mainPanel(
-    
+
   )
   )
 )
