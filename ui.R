@@ -1,5 +1,5 @@
 library(DT)
-library(tidyverse)
+library(dplyr)
 
 ui <- fluidPage(
   titlePanel("Statistical Consulting"),
@@ -29,7 +29,9 @@ ui <- fluidPage(
                   "Gross Operating Surplus Global Costs",
                   "Gross Operating Surplus Turnover 100"),
                 textOutput("number")
-    )
+    ), 
+    #Run Button
+    actionButton("runbutton","Run!")
     ),
     
   mainPanel(

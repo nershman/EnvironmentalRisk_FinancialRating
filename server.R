@@ -27,8 +27,31 @@ server <- function(input, output, session) {
     )
   })
   
+  
+  # observe button 1 press.
+  observe({
+    input$runbutton
+    if(input$response == "Financial Rating"){
+      current_model <- readRDS("models/ind_gam.RData")
+    }
+    
+    if(input$response == "Qualitative Rating"){
+      current_model <- readRDS("models/quali.RData")
+    }
+    
+    ###DEBUG MODAL:
+    showModal(modalDialog(
+      title = " debug: different model loaded",
+      length(current_model)
+    ))
+    
+    
+  })
+
+  
   output$tbl <- DT::renderDataTable({
     DT::datatable(data())
   })
+
   
 }
