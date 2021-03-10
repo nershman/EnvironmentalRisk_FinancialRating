@@ -2,7 +2,7 @@ library(DT)
 library(dplyr)
 
 ui <- fluidPage(
-  titlePanel("Statistical Consulting"),
+  titlePanel("Credit Scoring Prediction"),
   
   sidebarLayout(
     sidebarPanel(
@@ -32,10 +32,16 @@ ui <- fluidPage(
     ), 
     #Run Button
     actionButton("runbutton","Run!")
+
     ),
     
-  mainPanel(
-    DT::dataTableOutput("tbl")
-  )
+    mainPanel(
+      tabsetPanel(
+        type = "tabs",
+        tabPanel("Data",DT::dataTableOutput("tbl")),
+        tabPanel("Graphs"),
+        tabPanel("Model")
+      )
+    )
   )
 )
