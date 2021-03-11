@@ -36,8 +36,9 @@ ui <- fluidPage(
       tabsetPanel(
         type = "tabs",
         tabPanel("Data",DT::dataTableOutput("tbl")),
-        tabPanel("Graphs"),
-        tabPanel("Model")
+        tabPanel("Graphs", htmlOutput("print")),
+        tabPanel("Model",  verbatimTextOutput("reg")),
+        tabPanel("Predictions", tableOutput("pred"))
       )
     )
   )
