@@ -31,4 +31,17 @@ server <- function(input, output, session) {
     DT::datatable(data())
   })
   
+  
+  output$cam <- renderPlot({
+    nplot<-length(input$covariate)
+    covar <- input$covariate
+    myplots <- list()
+      for ( i in 1:nplot) {
+        p1<-  ggplot(data(), aes_string(y = input$response, x = covar[i])) + 
+                     geom_point() 
+        myplots[[i]] <- (p1)
+      } 
+    grid.arrange(grobs=myplots, ncol=3)
+  })
+
 }

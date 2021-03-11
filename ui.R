@@ -1,5 +1,8 @@
 library(DT)
 library(tidyverse)
+library(readxl)
+library(gridExtra)
+library(ggpubr)
 
 ui <- fluidPage(
   titlePanel("Credit Scoring Prediction"),
@@ -36,7 +39,7 @@ ui <- fluidPage(
       tabsetPanel(
         type = "tabs",
         tabPanel("Data",DT::dataTableOutput("tbl")),
-        tabPanel("Graphs"),
+        tabPanel("Graphs", plotOutput("cam",height = "400px")),
         tabPanel("Model")
       )
     )
