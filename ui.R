@@ -6,6 +6,7 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
+      tags$head(tags$style(".shiny-plot-output{height:100vh !important;}")),
       fileInput("file1", "Choose Excel File",
                 multiple = FALSE,
                 accept = "xlsx"),
@@ -36,7 +37,8 @@ ui <- fluidPage(
       tabsetPanel(
         type = "tabs",
         tabPanel("Data",DT::dataTableOutput("tbl")),
-        tabPanel("Graphs", htmlOutput("print")),
+        tabPanel("Graphs", plotOutput("pairplot",
+                                      width = "100%")),
         tabPanel("Model",  verbatimTextOutput("reg")),
         tabPanel("Predictions", tableOutput("pred"))
       )
