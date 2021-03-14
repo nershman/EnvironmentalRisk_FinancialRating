@@ -77,6 +77,10 @@ server <- function(input, output, session) {
     fit <- gam(as.formula(formula), data = data())
     summary(fit)
   })
+  
+   output$gamplot <- renderPlot({
+     plot(fit, pages=1)
+     })
 
   
   

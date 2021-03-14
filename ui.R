@@ -40,8 +40,10 @@ ui <- fluidPage(
       tabsetPanel(
         type = "tabs",
         tabPanel("Data",DT::dataTableOutput("tbl")),
-        tabPanel("Graphs", plotOutput("pairplot",
+        tabPanel("Scatterplots", plotOutput("pairplot",
                                       width = "100%")),
+        tabPanel("GAM Plots", plotOutput("gamplot",
+                                         width="100%")),
         tabPanel("Model",  verbatimTextOutput("reg")),
         tabPanel("Predictions", tableOutput("pred"))
       )
