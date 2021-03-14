@@ -73,6 +73,10 @@ server <- function(input, output, session) {
   })
   
    output$gamplot <- renderPlot({
+     rep_form <- paste(input$response, "~ ", sep = " ")
+     cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
+     formula <- paste(rep_form, cov_form)
+     fit <- gam(as.formula(formula), data = data())
      plot(fit, pages=1)
      })
 
