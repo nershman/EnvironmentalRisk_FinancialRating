@@ -67,7 +67,18 @@ server <- function(input, output, session) {
     rep_form <- paste(input$response, "~ ", sep = " ")
     cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
     formula <- paste(rep_form, cov_form)
-    fit <- gam(as.formula(formula), data = data())
+    if (input$family == "gaussian") {
+      fit <- gam(as.formula(formula), data = data(),
+               family = gaussian())
+    }
+    else if (input$family == "poisson") {
+      fit <- gam(as.formula(formula), data = data(),
+                 family = poisson())
+    }
+    else {
+      fit <- gam(as.formula(formula), data = data(),
+                  family = binomial())
+    }
     summary(fit)
   })
   

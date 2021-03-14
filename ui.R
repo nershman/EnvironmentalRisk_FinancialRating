@@ -30,7 +30,10 @@ ui <- fluidPage(
                   "Gross Operating Surplus Global Costs",
                   "Gross Operating Surplus Turnover 100"),
                 textOutput("number")
-    ), 
+    ),
+    selectInput("family", "Choose Exponential Family:",
+                choices = c("gaussian", "poisson", "binomial"),
+                selected = "gaussian"),
     #Run Button
     actionButton("runbutton","Run!")
     ),
