@@ -33,7 +33,6 @@ ui <- fluidPage(
     ), 
     #Run Button
     actionButton("runbutton","Run!")
-
     ),
     
     mainPanel(
@@ -42,6 +41,8 @@ ui <- fluidPage(
         tabPanel("Data",DT::dataTableOutput("tbl")),
         tabPanel("Scatterplots", plotOutput("pairplot",
                                       width = "100%")),
+        tabPanel("Boxplots", plotOutput("boxplot")),
+        tabPanel("Histogram"),
         tabPanel("GAM Plots", plotOutput("gamplot",
                                          width="100%")),
         tabPanel("Model",  verbatimTextOutput("reg")),

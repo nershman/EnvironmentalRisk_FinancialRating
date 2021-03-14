@@ -2,7 +2,6 @@ library(readxl)
 library(mgcv)
 library(broom)
 library(assertive.base)
-library(sjPlot)
 
 server <- function(input, output, session) {
   load("base_no_dupli.RData")  
@@ -79,7 +78,18 @@ server <- function(input, output, session) {
      fit <- gam(as.formula(formula), data = data())
      plot(fit, pages=1)
      })
+   
+   selected_data <- reactive({
+     ## input$numeric_var is a character vector, so we cast it to a list of symbols
+     var_list <- syms(c(input$response, input$covariate))
+     
+     ## Now we evaluate it with !!!
+     out_col <- data() %>% select(!!!var_list)
+   })
 
-  
+    output$boxplot <- renderPlot({
+      #compute natural log + 1
+      boxplot(log1p(selected_data()))
+    })
   
 }
