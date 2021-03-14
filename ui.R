@@ -42,7 +42,7 @@ ui <- fluidPage(
         tabPanel("Scatterplots", plotOutput("pairplot",
                                       width = "100%")),
         tabPanel("Boxplots", plotOutput("boxplot")),
-        tabPanel("Histogram"),
+        tabPanel("Histogram", plotOutput("histo") ),
         tabPanel("GAM Plots", plotOutput("gamplot",
                                          width="100%")),
         tabPanel("Model",  verbatimTextOutput("reg")),

@@ -91,5 +91,11 @@ server <- function(input, output, session) {
       #compute natural log + 1
       boxplot(log1p(selected_data()))
     })
+    
+    output$histo <- renderPlot({
+      hist(data()[[input$response]], 
+           main = paste("Histogram of", input$response),
+           xlab = input$response)
+    })
   
 }
