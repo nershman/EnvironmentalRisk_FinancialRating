@@ -2,6 +2,8 @@ library(readxl)
 library(mgcv)
 library(broom)
 library(assertive.base)
+library(ggplot2)
+library(gridExtra)
 
 server <- function(input, output, session) {
   load("base_no_dupli.RData")  
@@ -55,8 +57,20 @@ server <- function(input, output, session) {
 
   
   output$pred <- renderTable({
-    lm <- load(file = "quali.RData")
+    lm <- load(file = "/models/quali.RData")
     predict(lm_quali)[1:50]
+  })
+  
+  output$pairplot <- renderPlot({
+    nplot<-length(input$covariate)
+    covar <- input$covariate
+    myplots <- list()
+    for ( i in 1:nplot) {
+      p1<-  ggplot(data(), aes_string(y = input$response, x = covar[i])) + 
+        geom_point() 
+      myplots[[i]] <- (p1)
+    } 
+    grid.arrange(grobs=myplots, ncol=3)
   })
   
   output$print <- renderTable({
