@@ -34,9 +34,26 @@ server <- function(input, output, session) {
     )
   })
   
+  
+  # observe button 1 press.
+  observe({
+    input$runbutton
+    if(input$response == "Financial Rating"){
+     
+    }
+    
+    if(input$response == "Qualitative Rating"){
+      
+    }
+    
+    
+    
+  })
+
   output$tbl <- DT::renderDataTable({
     DT::datatable(data())
   })
+
   
   output$pred <- renderTable({
     lm <- load(file = "quali.RData")
@@ -54,6 +71,14 @@ server <- function(input, output, session) {
     fit <- gam(as.formula(formula), data = data())
     summary(fit)
   })
+  
+   output$gamplot <- renderPlot({
+     rep_form <- paste(input$response, "~ ", sep = " ")
+     cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
+     formula <- paste(rep_form, cov_form)
+     fit <- gam(as.formula(formula), data = data())
+     plot(fit, pages=1)
+     })
 
   
   
