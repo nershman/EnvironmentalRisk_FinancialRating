@@ -30,10 +30,12 @@ ui <- fluidPage(
                   "Gross Operating Surplus Global Costs",
                   "Gross Operating Surplus Turnover 100"),
                 textOutput("number")
-    ), 
+    ),
+    selectInput("family", "Choose Exponential Family:",
+                choices = c("gaussian", "poisson", "binomial"),
+                selected = "gaussian"),
     #Run Button
     actionButton("runbutton","Run!")
-
     ),
     
     mainPanel(
@@ -42,6 +44,8 @@ ui <- fluidPage(
         tabPanel("Data",DT::dataTableOutput("tbl")),
         tabPanel("Scatterplots", plotOutput("pairplot",
                                       width = "100%")),
+        tabPanel("Boxplots", plotOutput("boxplot")),
+        tabPanel("Histogram", plotOutput("histo") ),
         tabPanel("GAM Plots", plotOutput("gamplot",
                                          width="100%")),
         tabPanel("Model",  verbatimTextOutput("reg")),
