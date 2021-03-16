@@ -34,6 +34,10 @@ ui <- fluidPage(
     selectInput("family", "Choose Exponential Family:",
                 choices = c("gaussian", "poisson", "binomial"),
                 selected = "gaussian"),
+      
+    #save Button
+    actionButton("SaveDatabutton","Save"),    
+      
     #Run Button
     actionButton("runbutton","Run!")
     ),
