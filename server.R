@@ -52,8 +52,13 @@ server <- function(input, output, session) {
   })
 
   output$tbl <- DT::renderDataTable({
-    DT::datatable(data())
+    DT::datatable(subset(data(), select=c(input$covariate)))
   })
+  
+  observe(({
+    input$SaveDatabutton
+    save(data, file= "data_saved.RData")
+  }))
 
   
   output$pred <- renderTable({
