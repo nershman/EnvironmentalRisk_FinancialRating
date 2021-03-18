@@ -40,10 +40,12 @@ server <- function(input, output, session) {
   observe({
     input$runbutton
     if(input$response == "Financial Rating"){
-     
+
+      
     }
     
     if(input$response == "Qualitative Rating"){
+
       
     }
     
@@ -51,15 +53,38 @@ server <- function(input, output, session) {
     
   })
 
+  
   output$tbl <- DT::renderDataTable({
-    DT::datatable(data())
+    if(input$response == "Qualitativerating"){
+      DATA <- append(input$response, input$covariate)
+      DT::datatable(subset(data(), select=DATA))
+    }
+    else if(input$response == "Financialrating"){
+      DATA <- append(input$response, input$covariate)
+      DT::datatable(subset(data(), select=DATA))      
+    }    
   })
-
+  
+  observe(({
+    input$SaveDatabutton
+    save(data, file= "data_saved.RData")
+  }))
   
   output$pred <- renderTable({
-    lm <- load(file = "/models/quali.RData")
-    predict(lm_quali)[1:50]
+    if(input$response == "Qualitativerating"){
+      load(file = "./models/quali.RData")
+      lm_qualitative <- predict(lm_quali)[1:20]
+      data.frame(lm_qualitative)
+    }
+    else if(input$response == "Financialrating"){
+      load(file = "./models/ind_gam.RData")
+      load(file = "./models/con_gam.RData")
+      financial_industrie <- predict(ind_gam)[1:20]
+      financial_conseil <- predict(con_gam)[1:20]
+      data.frame(financial_industrie,financial_conseil)
+    }
   })
+  
   
   output$pairplot <- renderPlot({
     nplot<-length(input$covariate)
