@@ -40,24 +40,6 @@ server <- function(input, output, session) {
       selected = c("Turnover", "ebitda")
     )
   })
-  
-  
-  # observe button 1 press.
-  observe({
-    input$runbutton
-    if(input$response == "Financial Rating"){
-
-      
-    }
-    
-    if(input$response == "Qualitative Rating"){
-
-      
-    }
-    
-    
-    
-  })
 
   
   output$tbl <- DT::renderDataTable({
@@ -191,7 +173,7 @@ server <- function(input, output, session) {
      cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
      formula <- paste(rep_form, cov_form)
      fit <- gam(as.formula(formula), data = data())
-     plot(fit, pages=1)
+     plot(fit, pages=1, rug = TRUE)
      })
    
    selected_data <- reactive({

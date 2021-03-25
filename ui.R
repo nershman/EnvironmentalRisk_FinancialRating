@@ -1,12 +1,9 @@
 library(DT)
-<<<<<<< HEAD
 library(tidyverse)
 library(readxl)
 library(gridExtra)
 library(ggpubr)
-=======
-library(dplyr)
->>>>>>> e68881dbbbcb6e17b487bf7e514fe6efb220d2c1
+
 
 ui <- fluidPage(
   titlePanel("Credit Scoring Prediction"),
@@ -45,19 +42,13 @@ ui <- fluidPage(
     #save Button
     actionButton("SaveDatabutton","Download data"),
     
-    actionButton("SaveDatabuttonpredict", "Download prediction"),
-    #Run Button
-    actionButton("runbutton","Run!")
+    actionButton("SaveDatabuttonpredict", "Download prediction")
     ),
     
     mainPanel(
       tabsetPanel(
         type = "tabs",
         tabPanel("Data",DT::dataTableOutput("tbl")),
-<<<<<<< HEAD
-        tabPanel("Graphs", plotOutput("pairplot")),
-        tabPanel("Model")
-=======
         tabPanel("Scatterplots", plotOutput("pairplot",
                                       width = "100%")),
         tabPanel("Boxplots", plotOutput("boxplot")),
@@ -66,7 +57,6 @@ ui <- fluidPage(
                                          width="100%")),
         tabPanel("Model",  verbatimTextOutput("reg")),
         tabPanel("Predictions", tableOutput("pred"))
->>>>>>> 01d20852eec41e57cc364e5b172ce680405abde8
       )
     )
   )
