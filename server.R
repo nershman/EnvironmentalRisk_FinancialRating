@@ -4,6 +4,12 @@ library(broom)
 library(assertive.base)
 library(ggplot2)
 library(gridExtra)
+library(dplyr)
+library(plyr)
+library(caret)
+library(DescTools)
+library(forcats)
+library("prediction")
 
 server <- function(input, output, session) {
   load("base_no_dupli.RData")  
@@ -67,24 +73,63 @@ server <- function(input, output, session) {
   
   observe(({
     input$SaveDatabutton
-    save(data, file= "data_saved.RData")
+    save(data, file= "Data.xlsx")
   }))
   
-  output$pred <- renderTable({
+  table <- reactive({
+    set.seed(666)
     if(input$response == "Qualitativerating"){
-      load(file = "./models/quali.RData")
-      lm_qualitative <- predict(lm_quali)[1:20]
-      data.frame(lm_qualitative)
+      train_idx <- createDataPartition(data()$Qualitativerating,p=0.8,list=FALSE)
+      training <- data()[train_idx,]
+      test <- data()[-train_idx,]
+      rep_form <- paste(input$response, "~ ", sep = " ")
+      cov_form <- paste(input$covariate, collapse = "+")
+      formula <- paste(rep_form, cov_form)
+      fit <- lm(as.formula(formula), data = training)
+      lm_qualitative <- predict(fit, test)
+      table <- data.frame(True_Qualitativerating = test$Qualitativerating, Predict_Qualitativerating = lm_qualitative)
     }
     else if(input$response == "Financialrating"){
-      load(file = "./models/ind_gam.RData")
-      load(file = "./models/con_gam.RData")
-      financial_industrie <- predict(ind_gam)[1:20]
-      financial_conseil <- predict(con_gam)[1:20]
-      data.frame(financial_industrie,financial_conseil)
+      ## Conseil Droit
+      conseil <- data() %>% filter(group_name_mixed == "Conseil droit") 
+      train_idx <- createDataPartition(conseil$Financialrating,p=0.8,list=FALSE)
+      training_con <- conseil[train_idx,]
+      test_con <- conseil[-train_idx,]
+      rep_form <- paste(input$response, "~ ", sep = " ")
+      cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
+      formula <- paste(rep_form, cov_form)
+      con_gam <- gam(as.formula(formula),
+                     data = training_con)
+      temp_con <- predict.gam(con_gam, test_con)
+      
+      ## industrie
+      industrie <- data() %>% filter(group_name_mixed == "Industrie") 
+      train_idx <- createDataPartition(industrie$Financialrating,p=0.8,list=FALSE)
+      training <- industrie[train_idx,]
+      test <- industrie[-train_idx,]
+      rep_form <- paste(input$response, "~ ", sep = " ")
+      cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
+      formula <- paste(rep_form, cov_form)
+      ind_gam <- gam(as.formula(formula),
+                     data = training)
+      temp_ind <- predict.gam(ind_gam, test)
+
+
+      table <- data.frame(True_Financialrating_conseildroit = test_con$Financialrating[1:500], Predict_Financialrating_conseildroit = temp_con[1:500], True_Financialrating_industrie = test$Financialrating[1:500], Predict_Financialrating_industrie = temp_ind[1:500])
     }
+    table
   })
   
+  
+  output$pred <- renderTable({
+    data.frame(pred = table()[1:20,])
+  })
+  
+  observe(({
+    input$SaveDatabuttonpredict
+    write.table(table(), file = "Predict.csv", sep = ",")
+    write.csv(table(), "Predict.csv")
+  }))
   
   output$pairplot <- renderPlot({
     nplot<-length(input$covariate)

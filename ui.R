@@ -35,8 +35,9 @@ ui <- fluidPage(
                 choices = c("gaussian", "poisson", "binomial"),
                 selected = "gaussian"),
     #save Button
-    actionButton("SaveDatabutton","Save"),
+    actionButton("SaveDatabutton","Download data"),
     
+    actionButton("SaveDatabuttonpredict", "Download prediction"),
     #Run Button
     actionButton("runbutton","Run!")
     ),
