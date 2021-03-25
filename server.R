@@ -9,7 +9,7 @@ library(plyr)
 library(caret)
 library(DescTools)
 library(forcats)
-library("prediction")
+library(prediction)
 
 server <- function(input, output, session) {
   load("base_no_dupli.RData")  
@@ -87,7 +87,8 @@ server <- function(input, output, session) {
       formula <- paste(rep_form, cov_form)
       fit <- lm(as.formula(formula), data = training)
       lm_qualitative <- predict(fit, test)
-      table <- data.frame(True_Qualitativerating = test$Qualitativerating, Predict_Qualitativerating = lm_qualitative)
+      table <- data.frame(True_Qualitativerating = test$Qualitativerating, 
+                          Predict_Qualitativerating = lm_qualitative)
     }
     else if(input$response == "Financialrating"){
       ## Conseil Droit
@@ -100,7 +101,8 @@ server <- function(input, output, session) {
       formula <- paste(rep_form, cov_form)
       con_gam <- gam(as.formula(formula),
                      data = training_con)
-      temp_con <- predict.gam(con_gam, test_con)
+      temp_con <- predict.gam(con_gam, newdata = test_con,
+                              type = "response")
       
       ## industrie
       industrie <- data() %>% filter(group_name_mixed == "Industrie") 
@@ -112,10 +114,16 @@ server <- function(input, output, session) {
       formula <- paste(rep_form, cov_form)
       ind_gam <- gam(as.formula(formula),
                      data = training)
-      temp_ind <- predict.gam(ind_gam, test)
+      temp_ind <- predict.gam(ind_gam, newdata = test,
+                              type = "response")
 
 
-      table <- data.frame(True_Financialrating_conseildroit = test_con$Financialrating[1:500], Predict_Financialrating_conseildroit = temp_con[1:500], True_Financialrating_industrie = test$Financialrating[1:500], Predict_Financialrating_industrie = temp_ind[1:500])
+      table <- data.frame(True_Financialrating_conseildroit = test_con$Financialrating[1:500], 
+                          Predict_Financialrating_conseildroit = temp_con[1:500], 
+                          True_Financialrating_industrie = test$Financialrating[1:500], 
+                          Predict_Financialrating_industrie = temp_ind[1:500])
+      
+
     }
     table
   })
@@ -149,20 +157,32 @@ server <- function(input, output, session) {
   
   output$reg <- renderPrint({
     rep_form <- paste(input$response, "~ ", sep = " ")
-    cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
-    formula <- paste(rep_form, cov_form)
-    if (input$family == "gaussian") {
-      fit <- gam(as.formula(formula), data = data(),
-               family = gaussian())
-    }
-    else if (input$family == "poisson") {
-      fit <- gam(as.formula(formula), data = data(),
-                 family = poisson())
+    if(input$response == "Financialrating") {
+      cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
+      formula <- paste(rep_form, cov_form)
+      if (input$family == "gaussian") {
+        fit <- gam(as.formula(formula), data = data(),
+                   family = gaussian())
+      }
+      else if (input$family == "poisson") {
+        fit <- gam(as.formula(formula), data = data(),
+                   family = poisson())
+      }
+      else if (input$family == "binomial") {
+        fit <- gam(as.formula(formula), data = data(),
+                   family = binomial())
+      }
+      else {
+        fit <- gam(as.formula(formula), data = data(),
+                   family = nb())
+      }
     }
     else {
-      fit <- gam(as.formula(formula), data = data(),
-                  family = binomial())
+      formula <- paste(rep_form, paste(input$covariate, 
+                                       collapse = "+"))
+      fit <- lm(as.formula(formula), data = data())
     }
+    print(formula)
     summary(fit)
   })
   

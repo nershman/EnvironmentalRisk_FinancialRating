@@ -32,7 +32,8 @@ ui <- fluidPage(
                 textOutput("number")
     ),
     selectInput("family", "Choose Exponential Family:",
-                choices = c("gaussian", "poisson", "binomial"),
+                choices = c("gaussian", "poisson", "binomial",
+                            "negative binomial"),
                 selected = "gaussian"),
     #save Button
     actionButton("SaveDatabutton","Download data"),
