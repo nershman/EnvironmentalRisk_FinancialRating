@@ -13,6 +13,7 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
+      tags$head(tags$style(".shiny-plot-output{height:100vh !important;}")),
       fileInput("file1", "Choose Excel File",
                 multiple = FALSE,
                 accept = "xlsx"),
@@ -36,18 +37,35 @@ ui <- fluidPage(
                   "Gross Operating Surplus Global Costs",
                   "Gross Operating Surplus Turnover 100"),
                 textOutput("number")
-    ), 
+    ),
+    selectInput("family", "Choose Exponential Family:",
+                choices = c("gaussian", "poisson", "binomial"),
+                selected = "gaussian"),
+    #save Button
+    actionButton("SaveDatabutton","Download data"),
+    
+    actionButton("SaveDatabuttonpredict", "Download prediction"),
     #Run Button
     actionButton("runbutton","Run!")
-
     ),
     
     mainPanel(
       tabsetPanel(
         type = "tabs",
         tabPanel("Data",DT::dataTableOutput("tbl")),
+<<<<<<< HEAD
         tabPanel("Graphs", plotOutput("pairplot")),
         tabPanel("Model")
+=======
+        tabPanel("Scatterplots", plotOutput("pairplot",
+                                      width = "100%")),
+        tabPanel("Boxplots", plotOutput("boxplot")),
+        tabPanel("Histogram", plotOutput("histo") ),
+        tabPanel("GAM Plots", plotOutput("gamplot",
+                                         width="100%")),
+        tabPanel("Model",  verbatimTextOutput("reg")),
+        tabPanel("Predictions", tableOutput("pred"))
+>>>>>>> 01d20852eec41e57cc364e5b172ce680405abde8
       )
     )
   )
