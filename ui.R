@@ -1,5 +1,9 @@
 library(DT)
-library(dplyr)
+library(tidyverse)
+library(readxl)
+library(gridExtra)
+library(ggpubr)
+
 
 ui <- fluidPage(
   titlePanel("Credit Scoring Prediction"),
@@ -36,11 +40,9 @@ ui <- fluidPage(
                             "negative binomial"),
                 selected = "gaussian"),
     #save Button
+    checkboxInput("buttonlog", "Box plots in log scale?"),
     actionButton("SaveDatabutton","Download data"),
-    
-    actionButton("SaveDatabuttonpredict", "Download prediction"),
-    #Run Button
-    actionButton("runbutton","Run!")
+    actionButton("SaveDatabuttonpredict", "Download prediction")
     ),
     
     mainPanel(
@@ -54,7 +56,8 @@ ui <- fluidPage(
         tabPanel("GAM Plots", plotOutput("gamplot",
                                          width="100%")),
         tabPanel("Model",  verbatimTextOutput("reg")),
-        tabPanel("Predictions", tableOutput("pred"))
+        tabPanel("Predictions", tableOutput("pred")),
+        tabPanel("Metrics_MSE", tableOutput("MSE"))
       )
     )
   )
