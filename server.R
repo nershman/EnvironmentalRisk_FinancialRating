@@ -169,10 +169,34 @@ server <- function(input, output, session) {
   })
   
    output$gamplot <- renderPlot({
+     
      rep_form <- paste(input$response, "~ ", sep = " ")
-     cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
-     formula <- paste(rep_form, cov_form)
-     fit <- gam(as.formula(formula), data = data())
+     if(input$response == "Financialrating") {
+       cov_form <- paste(paste0("s", parenthesise(input$covariate)), collapse = "+")
+       formula <- paste(rep_form, cov_form)
+       if (input$family == "gaussian") {
+         fit <- gam(as.formula(formula), data = data(),
+                    family = gaussian())
+       }
+       else if (input$family == "poisson") {
+         fit <- gam(as.formula(formula), data = data(),
+                    family = poisson())
+       }
+       else if (input$family == "binomial") {
+         fit <- gam(as.formula(formula), data = data(),
+                    family = binomial())
+       }
+       else {
+         fit <- gam(as.formula(formula), data = data(),
+                    family = nb())
+       }
+     }
+     else {
+       formula <- paste(rep_form, paste(input$covariate, 
+                                        collapse = "+"))
+       fit <- lm(as.formula(formula), data = data())
+     }
+     
      plot(fit, pages=1, rug = TRUE)
      })
    
