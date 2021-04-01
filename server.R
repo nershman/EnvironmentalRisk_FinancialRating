@@ -27,7 +27,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session,
       "response",
-      choices = names(data()[-1]),
+      choices = c("Financialrating", "Qualitativerating"),
       selected = "Financialrating"
     )
   })
