@@ -39,7 +39,6 @@ ui <- fluidPage(
                 choices = c("gaussian", "poisson", "binomial",
                             "negative binomial"),
                 selected = "gaussian"),
-    #save Button
     checkboxInput("buttonlog", "Box plots in log scale?"),
     actionButton("SaveDatabutton","Download data"),
     actionButton("SaveDatabuttonpredict", "Download prediction")

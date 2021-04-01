@@ -65,7 +65,6 @@ server <- function(input, output, session) {
   })
   observe(({
     input$SaveDatabutton
-    #save(data, file= "Data.xlsx")
     write.table(DATA(), file = "Data.csv", sep = ",")
     write.csv(DATA(), "Data.csv")
   }))
